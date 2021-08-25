@@ -1,0 +1,15 @@
+osrm
+osrm/
+
+# Generated code
+build/
+node_modules/
+
+# Logs
+yarn-*.log*
+logs/**
+!logs/.gitkeep
+
+# Linux
+*~
+.Trash-*
