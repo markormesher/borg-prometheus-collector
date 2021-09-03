@@ -16,5 +16,5 @@ COPY ./tsconfig.json ./
 COPY ./src ./src/
 RUN yarn build
 
-EXPOSE 3000
+EXPOSE 9030
 CMD yarn start
