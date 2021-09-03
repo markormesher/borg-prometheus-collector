@@ -101,7 +101,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(3000, () => console.log("Server listening on HTTP/3000"));
+server.listen(9030, () => console.log("Server listening on HTTP/9030"));
 
 process.on("SIGTERM", () => {
   console.log("Closing server connection");
