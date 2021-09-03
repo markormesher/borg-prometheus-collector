@@ -1,6 +1,3 @@
-osrm
-osrm/
-
 # Generated code
 build/
 node_modules/
