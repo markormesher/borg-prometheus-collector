@@ -30,6 +30,12 @@ async function getMeasurements(): Promise<string[]> {
   const now = new Date().getTime();
   const minAges: { [key: string]: number } = {};
   for (const line of archiveListCmd.stdout.trim().split("\n")) {
+    const archiveName = line.split(" ")[0];
+    const labelMatcher = archiveName.match(archiveLabelRegex);
+    if (!labelMatcher || !labelMatcher[archiveLabelRegexGroup]) {
+      console.warn("Could not determine prefix for archive", { archiveName });
+      continue;
+    }
     const label = line.split(" ")[0].match(archiveLabelRegex)[archiveLabelRegexGroup];
     archiveLabeles.add(label);
     const dateStr = line.replace(/^[a-zA-Z0-9-]+ +(.*) \[[a-f0-9]+\]/, "$1");

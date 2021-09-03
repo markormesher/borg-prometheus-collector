@@ -10,7 +10,8 @@ function formatMeasurement(name: string, tags: { [key: string]: string }, value:
     tagStr = `{${tagStr}}`;
   }
 
-  return `${name}${tagStr} ${value} ${new Date().getTime()}`;
+  const measurement = `${name}${tagStr} ${value} ${new Date().getTime()}`;
+  return measurement;
 }
 
 export { formatMeasurement };
