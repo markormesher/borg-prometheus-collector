@@ -4,7 +4,7 @@ function formatMeasurement(name: string, tags: { [key: string]: string }, value:
     if (tagStr.length > 0) {
       tagStr += ",";
     }
-    tagStr += `${tagKey}=${tagVal}`;
+    tagStr += `${tagKey}="${tagVal}"`;
   }
   if (tagStr.length > 0) {
     tagStr = `{${tagStr}}`;
