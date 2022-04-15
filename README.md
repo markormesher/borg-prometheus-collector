@@ -4,6 +4,8 @@ A simple Prometheus collector to provide measurements about a single [Borg backu
 
 :rocket: Jump to [quick-start example](#quick-start-docker-compose-example).
 
+:whale: See releases on [Docker Hub](https://hub.docker.com/repository/docker/markormesher/borg-prometheus-collector/tags).
+
 ## Archives and Archive Prefixes
 
 First, some terms:
