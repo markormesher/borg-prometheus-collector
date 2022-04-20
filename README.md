@@ -1,10 +1,12 @@
+![CircleCI](https://img.shields.io/circleci/build/github/markormesher/borg-prometheus-collector)
+
 # Borg Prometheus Collector
 
 A simple Prometheus collector to provide measurements about a single [Borg backup](https://borgbackup.readthedocs.io/en/stable) repository. The collector will produce metrics about the entire repository and individual archives (see below).
 
 :rocket: Jump to [quick-start example](#quick-start-docker-compose-example).
 
-:whale: See releases on [Docker Hub](https://hub.docker.com/repository/docker/markormesher/borg-prometheus-collector/tags).
+:whale: See releases on [ghcr.io](https://github.com/markormesher/borg-prometheus-collector/pkgs/container/borg-prometheus-collector).
 
 ## Archives and Archive Prefixes
 
@@ -18,25 +20,25 @@ This collector assumes that your archives are named consistently and can be grou
 
 ## Measurements
 
-| Measurement | Description | Labels
-| --- | --- | --- |
-| `borg_repo_size_bytes` | Total size of the backup repository on disk, in bytes. | `repo_path` |
-| `borg_archive_age_seconds` | Age of the most recent backup for each archive label at the point the measurements were taken, in seconds. | `repo_path` and `archive_label` |
-| `borg_archive_original_size_bytes` | Original size of the most recent backup for each archive label, in bytes. | `repo_path` and `archive_label` |
-| `borg_archive_compressed_size_bytes` | Compressed size of the most recent backup for each archive label, in bytes. | `repo_path` and `archive_label` |
-| `borg_archive_number_of_files` | Number of files in the most recent backup for each archive label. | `repo_path` and `archive_label` |
+| Measurement                          | Description                                                                                                | Labels                          |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `borg_repo_size_bytes`               | Total size of the backup repository on disk, in bytes.                                                     | `repo_path`                     |
+| `borg_archive_age_seconds`           | Age of the most recent backup for each archive label at the point the measurements were taken, in seconds. | `repo_path` and `archive_label` |
+| `borg_archive_original_size_bytes`   | Original size of the most recent backup for each archive label, in bytes.                                  | `repo_path` and `archive_label` |
+| `borg_archive_compressed_size_bytes` | Compressed size of the most recent backup for each archive label, in bytes.                                | `repo_path` and `archive_label` |
+| `borg_archive_number_of_files`       | Number of files in the most recent backup for each archive label.                                          | `repo_path` and `archive_label` |
 
 ## Configuration
 
 Configuration is via the following environment variables:
 
-| Variable | Required? | Description | Default
-| --- | --- | --- | --- |
-| `REPO_PATH` | yes | Path to where your repo is mounted in the Docker container. It is recommended to make this path mirror the actual path on disk - see the quick-start example below. | n/a |
-| `REPO_PASSPHRASE` | no | Passphrase to your repo, if there is one. | none |
-| `REPO_PASSPHRASE_FILE` | no | Same as above, but read from a file. | none |
-| `ARCHIVE_LABEL_REGEX` | no | Regex that defines how to extract the archive label from your archive names. The default will take everything before the first hyphen. Make sure the label segment is wrapped in `(...)` so it can be extracted as a group. | `(.*?)-.+` |
-| `ARCHIVE_LABEL_GROUP` | no | Position of the group in the regex that contains the group label (positions start at 1). | `1` |
+| Variable               | Required? | Description                                                                                                                                                                                                                 | Default    |
+| ---------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `REPO_PATH`            | yes       | Path to where your repo is mounted in the Docker container. It is recommended to make this path mirror the actual path on disk - see the quick-start example below.                                                         | n/a        |
+| `REPO_PASSPHRASE`      | no        | Passphrase to your repo, if there is one.                                                                                                                                                                                   | none       |
+| `REPO_PASSPHRASE_FILE` | no        | Same as above, but read from a file.                                                                                                                                                                                        | none       |
+| `ARCHIVE_LABEL_REGEX`  | no        | Regex that defines how to extract the archive label from your archive names. The default will take everything before the first hyphen. Make sure the label segment is wrapped in `(...)` so it can be extracted as a group. | `(.*?)-.+` |
+| `ARCHIVE_LABEL_GROUP`  | no        | Position of the group in the regex that contains the group label (positions start at 1).                                                                                                                                    | `1`        |
 
 ## Docker Details
 
