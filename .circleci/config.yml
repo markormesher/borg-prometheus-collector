@@ -69,7 +69,7 @@ jobs:
             mkdir ~/cache
             docker tag ghcr.io/markormesher/borg-prometheus-collector:$(git describe) cache
             docker save -o ~/cache/docker.tar cache
-            ls -l ~/cache/docker.tar
+            ls -lh ~/cache/docker.tar
       - save_cache:
           key: docker-v1-{{ .Branch }}
           paths:
