@@ -66,6 +66,7 @@ jobs:
       - run:
           name: Create Docker cache
           command: |
+            rm -rf ~/cache
             mkdir ~/cache
             docker tag ghcr.io/markormesher/borg-prometheus-collector:$(git describe) cache
             docker save -o ~/cache/docker.tar cache
