@@ -1,4 +1,4 @@
-FROM node:fermium
+FROM node:16.14.2
 
 # install borg via pip because the ubuntu repo version is usually out of date
 RUN apt update \
