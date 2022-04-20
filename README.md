@@ -6,7 +6,7 @@ A simple Prometheus collector to provide measurements about a single [Borg backu
 
 :rocket: Jump to [quick-start example](#quick-start-docker-compose-example).
 
-:whale: See releases on [ghcr.io](https://github.com/markormesher/borg-prometheus-collector/pkgs/container/borg-prometheus-collector).
+:whale: See releases on [ghcr.io](https://ghcr.io/markormesher/borg-prometheus-collector).
 
 ## Archives and Archive Prefixes
 
