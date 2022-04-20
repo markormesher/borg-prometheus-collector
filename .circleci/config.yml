@@ -1,20 +1,54 @@
 version: 2
 
+defaults: &defaults
+  working_directory: ~/money-dashboard
+  docker:
+    - image: cimg/node:17.9.0
+
 jobs:
-  build-publish:
-    working_directory: ~/app
-    docker:
-      - image: cimg/node:17.9.0
+  setup:
+    <<: *defaults
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
           version: 20.10.12
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+            - v1-
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - save_cache:
+          key: v1-{{ .Branch }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  lint:
+    <<: *defaults
+    steps:
+      - run:
+          name: Run linters
+          command: |
+            yarn lint
+
+  build:
+    <<: *defaults
+    steps:
       - run:
           name: Build Docker image
           command: |
             docker build . -t ghcr.io/markormesher/borg-prometheus-collector:$(git describe)
             docker image ls
+
+  maybe-publish:
+    <<: *defaults
+    steps:
       - run:
           name: Maybe publish
           command: |
@@ -25,6 +59,16 @@ jobs:
 
 workflows:
   version: 2
-  build-publish:
+  main:
     jobs:
-      - build-publish
+      - setup
+      - lint:
+          requires:
+            - setup
+      - build:
+          requires:
+            - setup
+      - maybe-publish:
+          requires:
+            - lint
+            - build
