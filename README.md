@@ -56,7 +56,7 @@ version: "3.8"
 
 services:
   borg-prometheus-collector:
-    build: markormesher/borg-prometheus-collector
+    image: ghcr.io/markormesher/borg-prometheus-collector:VERSION
     restart: unless-stopped
     user: 1000:1000 # user and group from $(id -u) and $(id -g)
     environment:
