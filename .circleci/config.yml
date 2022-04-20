@@ -1,7 +1,7 @@
 version: 2
 
 defaults: &defaults
-  working_directory: ~/money-dashboard
+  working_directory: /app
   docker:
     - image: cimg/node:17.9.0
 
@@ -32,6 +32,8 @@ jobs:
   lint:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Run linters
           command: |
@@ -40,6 +42,8 @@ jobs:
   build:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Build Docker image
           command: |
@@ -49,6 +53,8 @@ jobs:
   maybe-publish:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Maybe publish
           command: |
