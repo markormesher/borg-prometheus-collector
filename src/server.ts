@@ -20,7 +20,7 @@ async function getMeasurements(): Promise<string[]> {
   const measurements: string[] = [];
 
   // overall repo size
-  const repoSizeCmd = await exec(`du --max-depth 0 -B1 "${repoPath}"`);
+  const repoSizeCmd = await exec(`du -s -B1 "${repoPath}"`);
   const repoSizeBytes = parseInt(repoSizeCmd.stdout.split(" ")[0]);
   measurements.push(formatMeasurement("borg_repo_size_bytes", { repo_path: repoPath }, repoSizeBytes));
 
