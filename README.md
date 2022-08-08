@@ -8,6 +8,8 @@ A simple Prometheus collector to provide measurements about a single [Borg backu
 
 :whale: See releases on [ghcr.io](https://ghcr.io/markormesher/borg-prometheus-collector).
 
+Note that reading your Borg repo can take some time, so this collector runs asynchronously. Tests are run on a configurable interval and every request to the `/metrics` endpoint will return the most recent results. Emitted metrics are timestamped, so this approach does not result in out of date data being logged.
+
 ## Archives and Archive Prefixes
 
 First, some terms:
@@ -32,13 +34,14 @@ This collector assumes that your archives are named consistently and can be grou
 
 Configuration is via the following environment variables:
 
-| Variable               | Required? | Description                                                                                                                                                                                                                 | Default    |
-| ---------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `REPO_PATH`            | yes       | Path to where your repo is mounted in the Docker container. It is recommended to make this path mirror the actual path on disk - see the quick-start example below.                                                         | n/a        |
-| `REPO_PASSPHRASE`      | no        | Passphrase to your repo, if there is one.                                                                                                                                                                                   | none       |
-| `REPO_PASSPHRASE_FILE` | no        | Same as above, but read from a file.                                                                                                                                                                                        | none       |
-| `ARCHIVE_LABEL_REGEX`  | no        | Regex that defines how to extract the archive label from your archive names. The default will take everything before the first hyphen. Make sure the label segment is wrapped in `(...)` so it can be extracted as a group. | `(.*?)-.+` |
-| `ARCHIVE_LABEL_GROUP`  | no        | Position of the group in the regex that contains the group label (positions start at 1).                                                                                                                                    | `1`        |
+| Variable               | Required? | Description                                                                                                                                                                                                                 | Default                 |
+| ---------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `REPO_PATH`            | yes       | Path to where your repo is mounted in the Docker container. It is recommended to make this path mirror the actual path on disk - see the quick-start example below.                                                         | n/a                     |
+| `REPO_PASSPHRASE`      | no        | Passphrase to your repo, if there is one.                                                                                                                                                                                   | none                    |
+| `REPO_PASSPHRASE_FILE` | no        | Same as above, but read from a file.                                                                                                                                                                                        | none                    |
+| `ARCHIVE_LABEL_REGEX`  | no        | Regex that defines how to extract the archive label from your archive names. The default will take everything before the first hyphen. Make sure the label segment is wrapped in `(...)` so it can be extracted as a group. | `(.*?)-.+`              |
+| `ARCHIVE_LABEL_GROUP`  | no        | Position of the group in the regex that contains the group label (positions start at 1).                                                                                                                                    | `1`                     |
+| `TEST_INTERVAL_MS`     | no        | How often to scan your Borg repo.                                                                                                                                                                                           | 600000ms (= 10 minutes) |
 
 ## Docker Details
 

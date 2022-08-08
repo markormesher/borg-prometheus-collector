@@ -5,6 +5,7 @@ enum ConfigKey {
   RepoPassphrase = "REPO_PASSPHRASE",
   ArchiveLabelRegex = "ARCHIVE_LABEL_REGEX",
   ArchiveLabelRegexGroup = "ARCHIVE_LABEL_GROUP",
+  TestIntervalMs = "TEST_INTERVAL_MS",
 }
 
 const loadedConfig: Partial<{ [key in ConfigKey]: string }> = {};

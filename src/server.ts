@@ -2,7 +2,7 @@ import * as http from "http";
 import * as util from "util";
 import { exec as execRaw } from "child_process";
 import { ConfigKey, getConfig } from "./config";
-import { formatMeasurement } from "./utils";
+import { formatMeasurement, log } from "./utils";
 
 const exec = util.promisify(execRaw);
 
@@ -11,6 +11,7 @@ const repoPath = getConfig(ConfigKey.RepoPath);
 const repoPassphrase = getConfig(ConfigKey.RepoPassphrase);
 const archiveLabelRegex = new RegExp(getConfig(ConfigKey.ArchiveLabelRegex, "(.*?)-.+"));
 const archiveLabelRegexGroup = parseInt(getConfig(ConfigKey.ArchiveLabelRegexGroup, "1"));
+const testIntervalMs = parseInt(getConfig(ConfigKey.TestIntervalMs, "600000"));
 
 // setup env
 process.env["BORG_RELOCATED_REPO_ACCESS_IS_OK"] = "yes";
@@ -82,31 +83,41 @@ async function getMeasurements(): Promise<string[]> {
   return measurements;
 }
 
+// string array of metrics, or null if collection is failing
+let latestMeasurements = [];
+setInterval(async () => {
+  try {
+    log("Refreshing metrics...");
+    latestMeasurements = await getMeasurements();
+  } catch (err) {
+    log("Failed to get measurements", err);
+    latestMeasurements = null;
+  }
+}, testIntervalMs);
+
 const server = http.createServer(async (req, res) => {
   if (req.url !== "/metrics") {
     res.writeHead(404).end();
     return;
   }
 
-  try {
-    const measurements = await getMeasurements();
+  if (latestMeasurements !== null) {
     res
       .writeHead(200, {
         "Content-Type": "text/plain",
       })
-      .end(measurements.join("\n"));
-  } catch (err) {
-    console.log("Failed to get measurements", err);
+      .end(latestMeasurements.join("\n"));
+  } else {
     res.writeHead(500).end();
   }
 });
 
-server.listen(9030, () => console.log("Server listening on HTTP/9030"));
+server.listen(9030, () => log("Server listening on HTTP/9030"));
 
 process.on("SIGTERM", () => {
-  console.log("Closing server connection");
+  log("Closing server connection");
   server.close(() => {
-    console.log("Exiting process");
+    log("Exiting process");
     process.exit(0);
   });
 });
